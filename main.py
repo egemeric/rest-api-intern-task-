@@ -77,7 +77,7 @@ class TextAnalyzer:
         return self.med_word
 
     def language(self):
-
+        pass
 
     def topfivewords(self):
         word_occurrence = self.__create_zero_word_dict_values(self.word_dict)
@@ -201,8 +201,6 @@ class HttpRestServer(BaseHTTPRequestHandler):
                     self.send_msg_back(self.cgi.convert_to_json())
                 except TypeError:
                     self.send_bad_request()
-
-
             else:
                 self.send_bad_request()
         else:
