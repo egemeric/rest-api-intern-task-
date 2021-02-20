@@ -1,7 +1,11 @@
 # rest-api-intern-task-
 Ege Meriç Erdoğan(Rest-Api Backend Task)  
 
-
+ ## Start Server:
+ Server listens http://0.0.0.0:8000 and you can send "application/json" requests to http://localhost:8000/analyze
+ ```sh
+ python main.py 
+ ```
  ## Example request:
 ```sh
 curl -i --header "Content-Type: application/json"   --request POST   --data '{"text":"ege meric erdogan"}'   http://localhost:8000/analyze
