@@ -3,6 +3,8 @@ Ege Meriç Erdoğan(Rest-Api Backend Task)
 
  ## Start Server:
  Server listens http://0.0.0.0:8000 and you can send "application/json" requests to http://localhost:8000/analyze
+ 
+ Url Paremeters don't work now but I will add in later times
  ```sh
  python main.py 
  ```
