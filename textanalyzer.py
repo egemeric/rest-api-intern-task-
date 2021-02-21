@@ -96,7 +96,6 @@ class TextAnalyzer:
         for temp in word_occurrence[:5]:  # list top five word
             topfive["topfivewords"].append(temp[0])
         self.send_json_obj.update(topfive)
-        print("Top 5 words:", topfive)
 
     def __get_word_dict(self):
         self.word_dict = list(set(self.words).union(self.words))
@@ -120,7 +119,7 @@ class TextAnalyzer:
 start_eng_keywords = {"am", "is", "are", "did", "I", "am", "we", "they", "them",
                       "It", "on", "in", "the", "to", "he", "she", "my", "her", "his",
                       "our", "us", "what", "why", "when", "much", "many"
-                      }
+                      }  # if the sent text eng score > 10 these values are updated by LanguageGuess
 
 
 class LanguageGuess:
@@ -138,7 +137,7 @@ class LanguageGuess:
         self.__update_learned_eng_words()  # hypothetically all entered text is grammatically true
 
     def __create_score_table(self):
-        print(self.start_eng_keywords)
+        print("Eng dictionary", self.start_eng_keywords)
         for i in self.start_eng_keywords:
             self.score_table.update({i: 0})
 

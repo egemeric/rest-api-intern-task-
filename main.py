@@ -5,7 +5,7 @@ import urllib
 
 
 class RestApiCgi:
-    RequestBodyVars = ("text", "analysis")
+    RequestBodyVars = ("text", "analysis")  # not used for now
 
     def __init__(self, data):
         self.json_data = data
@@ -16,33 +16,41 @@ class RestApiCgi:
         try:
             return json.dumps(self.text_analyzer_obj.send_json_obj, ensure_ascii=False, indent=4)
         except TypeError:
+            print("convert to json error")
             return False
 
     def convert_to_python(self):
         try:
             return json.loads(self.json_data)
         except json.decoder.JSONDecodeError:
+            print("convert to python error")
             return False
 
     def handle_request_body(self):
         json_body = {}
         json_body = self.convert_to_python()
         text = json_body.get("text")
-        if text == None:
+        if text is None:
             raise TypeError
         self.text_analyzer_obj = TextAnalyzer(text)
         if "analysis" in json_body.keys():
             self.analysis_options = json_body.get("analysis")
             print("analysis options:", self.analysis_options)
             app = RestApiHandleApps(self.text_analyzer_obj, api_options=self.analysis_options)
+            print(self.text_analyzer_obj.send_json_obj)
         else:
-            app = RestApiHandleApps(self.text_analyzer_obj, api_options=None)
-        print(self.text_analyzer_obj.send_json_obj)
+            app = RestApiHandleApps(self.text_analyzer_obj, api_options=None)  # if text variable is in the request and the other requests variables is not defined(analisis),
+        if app.all_options_is_done is not True:                                # server will return all options
+            self.text_analyzer_obj.send_json_obj.update({"request": {"status": app.all_options_is_done,
+                                                                     "notfound": app.not_found_requests},
+                                                         })
 
 
 class RestApiHandleApps:
+
     def __init__(self, text_analyzer_obj, api_options):
         self.all_options_is_done = False
+        self.not_found_requests = []
         self.api_options = api_options
         self.text_analyzer_obj = text_analyzer_obj
         self.__functions = {'wordCount': text_analyzer_obj.wordCount,
@@ -67,7 +75,7 @@ class RestApiHandleApps:
                     self.all_options_is_done = True
                 except KeyError:
                     self.all_options_is_done = False
-
+                    self.not_found_requests.append(analysis)
         else:
             for all_funs in self.__functions:
                 self.__functions[all_funs]()
@@ -99,9 +107,9 @@ class HttpRestServer(BaseHTTPRequestHandler):
                     self.send_bad_request()
             else:
                 self.send_bad_request()
-            del self.cgi
         else:
             self.send_bad_request()
+        del self.cgi
 
     def get_rfile_data(self):
         content_length = int(self.headers.get("content-length"))
