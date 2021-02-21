@@ -22,16 +22,17 @@ curl -i --header "Content-Type: application/json"   --request POST   --data '{"t
     "duration": 0.8999999999999999,
     "medianWordLength": 5,
     "medianWord": "meric",
+    "language": "TR",
     "topfivewords": [
         "ege",
-        "meric",
-        "erdogan"
+        "erdogan",
+        "meric"
     ]
 }
 ``` 
 ## or you can request by "analysis" keyword and you can put options in a array
 ```sh
-curl --header "Content-Type: application/json"   --request POST   --data '{"text":"ege meric erdogan","analysis": ["medianWord"]}'   http://127.0.0.1:8000/analyze
+curl -i --header "Content-Type: application/json"   --request POST   --data '{"text":"ege meric erdogan","analysis": ["medianWord"]}'   http://127.0.0.1:8000/analyze
 ```
 ## Response:
 ```json
